@@ -76,7 +76,7 @@ Recreate deletes the resources of the current deployment before deploying the up
 
 #### Rolling Updates Strategy
 
-Rolling Updates deletes ands updates the current deployment's resources one by one so there is no service downtime.
+Rolling Updates deletes and updates the current deployment's resources one by one so there is no service downtime.
 
 ### Handling Rollouts
 
@@ -118,19 +118,74 @@ kubectl rollout undo deployment/myapp-deployment --to-revision=2
 
 ### Restart Policies
 
-- Always, 
-- onFailure, 
-- Never, 
+- Always, a deployment is created (default, not supported for CronJobs) 
+- OnFailure, a job is created
+- Never, a regular pod is created (default for CronJobs) 
+
+### Sample YAML definition
+
+#### Jobs
 
 ```
-apiVersion: v1
-kind: Pod
+apiVersion: batch/v1
+kind: Job
 metadata:
-  name: math-pod
+  name: math-add-job
 spec:
-  containers:
-  - name: math-add
-    image: ubuntu
-    command: ['expr', '3', '+', '2']
-  restartPolicy: Never
+  backoffLimit: 25   # no. of times pods can be recreated
+  completions: 3     # target no. of completed jobs
+  parallelism: 3     # no. of pods that runs concurrently to run the job
+  template:
+    spec:
+      containers:                          # 
+      - name: math-add                     # 
+        image: ubuntu                      # spec of pod definition
+        command: ['expr', '3', '+', '2']   # 
+      restartPolicy: Never                 #
+```
+
+#### CronJobs
+
+```
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: math-add-job
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:                                                                 # 
+      backoffLimit: 25   # no. of times pods can be recreated             # 
+      completions: 3     # target no. of completed jobs                   # 
+      parallelism: 3     # no. of concurrent pods to run the job          # 
+      template:                                                           # 
+        spec:                                                             # spec of job template
+          containers:                          #                          # 
+          - name: math-add                     #                          # 
+            image: ubuntu                      # spec of pod definition   # 
+            command: ['expr', '3', '+', '2']   #                          # 
+          restartPolicy: Never                 #                          # 
+```
+
+### Using `kubectl run` command (deprecated)
+
+#### Jobs
+
+```
+kubectl run \
+  --generator=job/v1 \
+  --image=ubuntu myjob \
+  --restart=OnFailure \
+  -- /bin/sh -c 'echo hello;sleep 30;echo world'
+```
+
+#### CronJobs
+
+```
+kubectl run \
+  --generator=cronjob/v1beta1 \
+  --image=ubuntu \
+  --restart=Never \
+  --schedule="30 21 * * *" \
+  cron-job 
 ```
