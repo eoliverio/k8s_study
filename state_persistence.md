@@ -35,6 +35,8 @@ spec:
       fsType: ext4
 ```
 
+#### [Other volume types](https://kubernetes.io/docs/concepts/storage/#types-of-volumes)
+
 ## Persistent Volume
 
 Shorthand for `persistentvolume` is `pv`
