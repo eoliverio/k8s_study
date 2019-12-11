@@ -24,9 +24,9 @@ Kubectl resources and shorthand names
 - `deployment` or `deploy`
 - `namespace` or `ns`
 
-## Pods
+## 1. Pods
 
-### Sample YAML definition
+### 1.1. Sample YAML definition
 ```
 apiVersion: v1
 kind: Pod
@@ -41,7 +41,7 @@ spec:
     image: nginx
 ```
 
-### PODS command line reference sheet
+### 1.2. PODS command line reference sheet
 
 #### Using `kubectl run` command
 ```
@@ -78,9 +78,9 @@ kubectl run \
   <pod name>  
 ```
 
-## Replication Controller
+## 2. Replication Controller
 
-### Sample YAML definition
+### 2.1. Sample YAML definition
 ```
 apiVersion: v1
 kind: ReplicationController
@@ -103,7 +103,7 @@ spec:
 replicas: 3
 ```
 
-### Replication Controller command line reference sheet
+### 2.2. Replication Controller command line reference sheet
 
 #### Using `kubectl run` command
 ```
@@ -117,9 +117,9 @@ kubectl run \
 ```
 
 
-## Replication Set
+## 3. Replication Set
 
-### Sample YAML definition
+### 3.1. Sample YAML definition
 ```
 apiVersion: apps/v1
 kind: ReplicationSet
@@ -145,7 +145,7 @@ selector:                      # "selector" is REQUIRED in rs but not in rc.
     type: front-end            #   definition files.
 ```
 
-### Replication Set command line reference sheet
+### 3.2. Replication Set command line reference sheet
 
 #### Using `kubectl run` command
 There is no specific way to use `kubectl run` for replication sets.  
@@ -160,9 +160,9 @@ kubectl scale --replicas=6  rs rs-redis
 ```
 
 
-## Deployment
+## 4. Deployment
 
-### Sample YAML definition
+### 4.1. Sample YAML definition
 ```
 apiVersion: apps/v1
 kind: Deployment               # The only difference from replication set
@@ -188,7 +188,7 @@ selector:
     type: front-end
 ```
 
-### Deployment command line reference sheet
+### 4.2. Deployment command line reference sheet
 
 #### Using `kubectl run` command
 ```
@@ -219,23 +219,27 @@ kubectl autoscale deploy <deployment-name> \
   -o yaml
 ```
 
+## 5. Namespace
 
-## Namespace
+### 5.1. Creating a namespace
 
-### Creating a namespace through YAML definition file
+#### Using YAML definition file
 ```
 apiVersion: v1
 kind: Namespace
 metadata:
   name: dev
 ```
+```
+kubectl create -f ns-definition.yaml
+```
 
-### Creating a namespace through command line
+#### Using command line
 ```
 kubectl create ns <namespace-name>
 ```
 
-### Other commands relating to namespaces
+### 5.2. Other commands relating to namespaces
 ```
 kubectl get all --all-namespaces
 kubectl run nginx --image=nginx -n <namespace-name>

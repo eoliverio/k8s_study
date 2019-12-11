@@ -4,7 +4,7 @@
 
 Shorthand for ConfigMaps is `cm`.
 
-### Sample YAML definition
+### 1.1. Sample YAML definition
 
 ```
 apiVersion: v1
@@ -16,7 +16,7 @@ data:
   APP_MODE: prod
 ```
 
-### Using `kubectl` CLI
+### 1.2. Using `kubectl` CLI
 
 #### Configuration injection using `--from-literal`
 
@@ -42,7 +42,7 @@ kubectl create configmap \
   app-config --from-file=app_config.properties
 ```
 
-### Configuration injection in YAML definition files
+### 1.3. Configuration injection in YAML definition files
 
 #### Listing under `spec.containers.env`
 ```
@@ -77,7 +77,7 @@ kubectl create configmap \
         name: app-config-2
 ```
 
-### Viewing ConfigMaps
+### 1.4. Viewing ConfigMaps
 
 ```
 kubectl get cm
@@ -86,7 +86,7 @@ kubectl describe cm <config-name>
 
 ## 2. Secrets
 
-### Sample YAML definition
+### 2.1. Sample YAML definition
 
 ```
 apiVersion: v1
@@ -99,7 +99,7 @@ data:
   DB_Password: paswrd
 ```
 
-### Using `kubectl` CLI
+### 2.2. Using `kubectl` CLI
 
 #### Creating secret using `--from-literal`
 ```
@@ -113,7 +113,7 @@ kubectl create secret generic \
              --from-literal=DB_Passport=paswrd
 ```
 
-### Secret injection in YAML definition files
+### 2.3. Secret injection in YAML definition files
 
 #### Injecting from existing Secret under `spec.containers.envFrom`
 
@@ -171,7 +171,7 @@ kubectl create secret generic \
   app-secret --from-file=app_secret.properties
 ```
 
-### Encoding Secrets
+### 2.4. Encoding Secrets
 
 ```
 ╔═══════════════════════╗   ╔══════════════════════════╗
@@ -190,7 +190,7 @@ cm9vdA==
 cGFzd3Jk
 ```
 
-### Decoding Secrets
+### 2.5. Decoding Secrets
 
 ```
 ╔════════════════════════╗   ╔═════════════════════════╗
@@ -209,7 +209,7 @@ root
 paswrd
 ```
 
-### Viewing Secrets
+### 2.6. Viewing Secrets
 
 ```
 kubectl get secrets
@@ -245,13 +245,13 @@ Thu Apr 19 11:14:00 UTC 2012
 
 Shorthand for `serviceaccount` is `sa`.
 
-### Creating Service Account
+### 4.1. Creating Service Account
 
 ```
 kubectl create sa dashboard-sa
 ```
 
-### Default serviceaccount in pod
+### 4.2. Default serviceaccount in pod
 
 When serviceAccount is not defined in the pod definition file, kubernetes automatically mounts a default serviceAccount.
 
@@ -289,7 +289,7 @@ iLOrdWl1cm51dGVAmlvL3N1cnZ02VhY2NvdW5OL3N1cnZOQUtYWNjb3VudC5uVW1lIjoiZGVmYXVsdCI
 jY291bnQvc2VydmljZS1hY2NydW5OLnVpZCI6IjcxZGM4YWEA_TU2MGMtMTFl0004YmIeLTA4MDAyNzkzMTA3MiIsInNlYiI6InN5c3R1bTpzZXJWN 
 ```
 
-### Setting custom serviceaccount
+### 4.3. Setting custom serviceaccount
 
 ```
 apiVersion: v1
@@ -329,7 +329,7 @@ Volumes:
     Optional:    false
 ```
 
-### Disabling service account auto-mount using `automountServiceAccountToken`
+### 4.4. Disabling service account auto-mount using `automountServiceAccountToken`
 
 ```
 apiVersion: v1
@@ -354,7 +354,7 @@ spec:
 
 ## 5. Resource Requirements
 
-### Setting resource in pod definition file
+### 5.1. Setting resource in pod definition file
 
 ```
 apiVersion: v1
@@ -375,7 +375,7 @@ spec:
         cpu: 1
 ```
 
-### Setting resource using `kubectl run` command
+### 5.2. Setting resource using `kubectl run` command
  
 ```
 kubectl run nginx --image=nginx --restart=Never \
@@ -384,7 +384,7 @@ kubectl run nginx --image=nginx --restart=Never \
   --dry-run -o yaml
 ```
 
-### CPU values
+### 5.3. CPU values
 
 ```
 0.1 CPU = 100m (milli)
@@ -395,7 +395,7 @@ minimum = 1m (milli)
           1 Hyperthread
 ```
 
-### Memory values
+### 5.4. Memory values
 
 ```
 1G (Gigabyte) = 1,000,000,000 bytes
@@ -407,7 +407,7 @@ minimum = 1m (milli)
 1Ki (Kibibyte) = 1,024
 ```
 
-### Resource Limits
+### 5.5. Resource Limits
 
 Pods can request for resource as required.  
 Set limits to throttle the resource usage of the pod.
@@ -435,7 +435,7 @@ Instead, it tells the node to only accept pods with certain tolerations.
 
 Restricting pods to certain nodes can be achieved through Node Affinity.
 
-### Tainting nodes
+### 6.1. Tainting nodes
 ```
 kubectl taint nodes <node-name> <key=value>:<taint-effect>
 kubectl taint nodes node01 app=blue:NoSchedule
@@ -453,7 +453,7 @@ kubectl taint nodes master node-role.kubernetes.io/master:NoSchedule-'
 `PreferNoSchedule`: system will try to avoid placing a pod on the node but it is not guaranteed 
 `NoExecute`: new pods will not schedule on the node and existing pods, if any, will be evicted if they do not tolerate the taint. Evicted pods are killed.
 
-### Setting tolerations in pod definition file
+### 6.2. Setting tolerations in pod definition file
 
 ```
        ╔═══════════════════════════════════════════════╗
@@ -477,7 +477,7 @@ kubectl taint nodes master node-role.kubernetes.io/master:NoSchedule-'
 ╚════════════════════════════╝
 ```
 
-### Viewing taints in nodes
+### 6.3. Viewing taints in nodes
 
 ```
 > kubectl describe node kubemaster | grep Taints
@@ -486,7 +486,7 @@ Taints:            node-role.kubernetes.io/master:NoSchedule
 
 ## 7. Node Selectors
 
-### Setting node selectors in pod definition file
+### 7.1. Setting node selectors in pod definition file
 
 ```
 apiVersion: v1           
@@ -504,14 +504,14 @@ spec:
 > Note: Key-values under nodeSelector are labels assigned to the nodes.  
 > The scheduler uses these labels to match and identify the right node to place the pods on. So it must be set on the node beforehand.
 
-### Setting labels to nodes
+### 7.2. Setting labels to nodes
 
 ```
 kubectl label node <node-name> <key>=<value>
 kubectl label nodes node-1 size=Large
 ```
  
-### Limitations
+### 7.3. Limitations
 
 `nodeSelector` is unable to cater for advanced expressions like:
 - Large OR Medium
@@ -521,7 +521,7 @@ These can be done using Node Affinity and Anti-Affinity.
 
 ## 8. Node Affinity
 
-### Sample node affinity setting in pod definition file
+### 8.1. Sample node affinity setting in pod definition file
 
 ```
 apiVersion: v1
@@ -544,7 +544,7 @@ spec:
             - Medium
 ```
 
-### Node Affinity and Anti Affinity operators
+### 8.2. Node Affinity and Anti Affinity operators
 
 #### Node Affinity
 
@@ -555,7 +555,7 @@ spec:
 `NotIn`, `DoesNotExist`  
 ...or use node taints to repel pods from specific nodes.
 
-### Node Affinity types
+### 8.3. Node Affinity types
 
 `requiredDuringSchedulingignoredDuringExecution`  
 if no match is found, pod is not scheduled

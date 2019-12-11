@@ -1,6 +1,6 @@
 # Observability
 
-## [Pod phase](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase)
+## 1. [Pod Phases](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase)
 
 The phase of a Pod is a simple, high-level summary of where the Pod is in its lifecycle.
 
@@ -30,7 +30,7 @@ All Containers in the Pod have terminated, and at least one Container has termin
 
 For some reason the state of the Pod could not be obtained, typically due to an error in communicating with the host of the Pod.
 
-## [Pod Condition Types](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-conditions)
+## 2. [Pod Condition Types](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-conditions)
 
 Found using `kubectl describe po <pod-name>` under the Conditions section.
 
@@ -55,7 +55,9 @@ The scheduler cannot schedule the Pod right now, for example due to lack of reso
 All containers in the Pod are ready.
 
 
-## Readiness Probes
+## 3. Readiness Probes
+
+### Sample YAML definition
 
 ```
 apiVersion: v1
@@ -115,11 +117,13 @@ spec:
       failureThreshold: 8       # probe until 8 failures 
 ```
 
-## Liveness Probes
+## 4. Liveness Probes
 
 Almost exactly the same as Readiness Probe.  
 Just change from `readinessProbe` to `livelinessProbe`.
 
+### Sample YAML definition
+
 ```
 apiVersion: v1
 kind: Pod
@@ -178,7 +182,7 @@ spec:
       failureThreshold: 8       # probe until 8 failures 
 ```
 
-## Container Logging
+## 5. Container Logging
 
 Indicate the container name if the pod has multiple containers.
 
@@ -187,7 +191,7 @@ kubectl logs -f <pod-name> <container-name>
 kubectl logs -f event-simulator-pod event-simulator
 ```
 
-## Monitor and Debug Applications
+## 6. Monitor and Debug Applications
 
 Kubernetes does not come with a built-in monitoring solution.
 

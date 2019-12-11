@@ -1,9 +1,8 @@
 # POD DESIGN
 
+## 1. Labels and Selectors
 
-## Labels and Selectors
-
-### Listing and filtering pods
+### 1.1. Listing and filtering pods
 
 #### `--show-labels` displays all labels under a LABELS column
 ```
@@ -27,7 +26,7 @@ kubectl get po -L app,release
 kubectl get po --field-selector=status.phase!=Running,spec.restartPolicy=Always
 ```
 
-### Labeling Pods
+### 1.2. Labeling Pods
 
 #### `--overwrite` overwrites if label already exists on the resource
 ```
@@ -45,10 +44,9 @@ kubectl label po <pod1-name> <pod2-name> <pod3-name> app-
 kubectl label po foo status=unhealthy --resource-version=1
 ```
 
+## 2. Annotations
 
-## Annotations
-
-### Annotating Pods
+### 2.1. Annotating Pods
 
 #### `--overwrite` overwrites if annotation already exists on the resource
 ```
@@ -65,10 +63,9 @@ kubectl annotate po <pod1-name> <pod2-name> description-
 kubectl annotate po foo description='my frontend running nginx' --resource-version=1
 ```
 
+## 3. Rolling Updates and Deployment Rollbacks
 
-## Rolling Updates and Deployment Rollbacks
-
-### Strategies
+### 3.1. Strategies
 
 #### Recreate Strategy
 
@@ -78,7 +75,7 @@ Recreate deletes the resources of the current deployment before deploying the up
 
 Rolling Updates deletes and updates the current deployment's resources one by one so there is no service downtime.
 
-### Handling Rollouts
+### 3.2. Handling Rollouts
 
 #### creating and updating deployments
 ```
@@ -114,15 +111,15 @@ kubectl rollout resume deploy nginx
 kubectl rollout undo deployment/myapp-deployment --to-revision=2
 ```
 
-## Jobs and Cronjobs
+## 4. Jobs and Cronjobs
 
-### Restart Policies
+### 4.1. Restart Policies
 
 - Always, a deployment is created (default, not supported for CronJobs) 
 - OnFailure, a job is created
 - Never, a regular pod is created (default for CronJobs) 
 
-### Sample YAML definition
+### 4.2. Sample YAML definition
 
 #### Jobs
 
@@ -167,7 +164,7 @@ spec:
           restartPolicy: Never                 #                          # 
 ```
 
-### Using `kubectl run` command (deprecated)
+### 4.3. Using `kubectl run` command (deprecated)
 
 #### Jobs
 
