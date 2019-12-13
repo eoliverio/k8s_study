@@ -117,12 +117,12 @@ kubectl run \
 ```
 
 
-## 3. Replication Set
+## 3. Replica Set
 
 ### 3.1. Sample YAML definition
 ```
 apiVersion: apps/v1
-kind: ReplicationSet
+kind: ReplicaSet
 metadata:
   name: myapp-rs
   labels:
@@ -145,11 +145,11 @@ selector:                      # "selector" is REQUIRED in rs but not in rc.
     type: front-end            #   definition files.
 ```
 
-### 3.2. Replication Set command line reference sheet
+### 3.2. Replicat Set command line reference sheet
 
 #### Using `kubectl run` command
-There is no specific way to use `kubectl run` for replication sets.  
-Just `--dry-run` a deployment and replace the kind in the YAML file to ReplicationSet.
+There is no specific way to use `kubectl run` for replica sets.  
+Just `--dry-run` a deployment and replace the kind in the YAML file to ReplicaSet.
 
 #### Using the `kubectl scale` command
 ```
@@ -165,7 +165,7 @@ kubectl scale --replicas=6  rs rs-redis
 ### 4.1. Sample YAML definition
 ```
 apiVersion: apps/v1
-kind: Deployment               # The only difference from replication set
+kind: Deployment               # The only difference from replicat set
 metadata:
   name: myapp-deployment
   labels:

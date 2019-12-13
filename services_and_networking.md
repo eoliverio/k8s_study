@@ -6,7 +6,9 @@ Shorthand for service is `svc`.
 
 ### 1.1. Handing Services using `kubectl`
 
-#### 1.1.1. Creating `NodePort` service using `kubectl create`
+#### 1.1.1. Creating Service
+
+##### Using `kubectl create`
 
 ```
 kubectl create svc <service-type> <service-name> \
@@ -19,7 +21,67 @@ kubectl create service nodeport webapp-service \
   --dry-run -o yaml > svc-definition.yaml
 ```
 
-#### 1.1.2. Creating service using `--expose` flag in `kubectl run`
+##### Using `kubectl expose`
+
+Applicable for:
+- `po` pods
+- `svc` services
+- `rc` replication controllers
+- `rs` replica sets
+- `deploy` deployments
+
+```
+kubectl expose <resource> <resource-name> \
+  --name=<service-name>
+  --port=<port> \
+  --target-port=<target-port> \
+  --type=<type> \
+  
+kubectl expose deploy webapp \
+  --name=webapp-service \
+  --port=8800 \
+  --target-port=8080 \
+  --type=NodePort
+```
+
+To set the `nodePort':
+
+1. Extract a service definition file
+
+```
+kubectl expose deploy webapp \
+  --name=webapp-service \
+  --port=8800 \
+  --target-port=8080 \
+  --type=NodePort \
+  --dry-run -o yaml > webapp-service.yaml
+```
+
+2. Add `nodePort` in definition file
+```
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  type: NodePort
+  ports:
+  - targetPort: 8080
+    port: 8080
+    nodePort: 30082      # add nodePort
+  selector:
+    app: webapp
+    type: front-end
+```
+
+3. Create the service using `kubectl create`
+
+```
+> kubectl create -f webapp-service.yaml
+service "webapp-service" created
+````
+
+##### Using `--expose` flag in `kubectl run`
 
 If expose is true, a public, external service is created for the container(s) which are run.
 
@@ -29,7 +91,7 @@ kubectl run nginx --image=nginx --restart=Never --port=80 --expose
 
 > Source: [kubectl run](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#run)
 
-#### 1.1.3. Viewing/Testing service
+#### 1.1.2. Viewing/Testing service
 
 ```
 > kubectl get svc
@@ -299,7 +361,7 @@ This is a special build of NGINX built specifically to be used as an ingress-con
 ║   replicas: 1                                            ║  ║   name: nginx-configuration          ║
 ║   selector:                                              ║  ╚══════════════════════════════════════╝
 ║     matchLabels:                                         ║  
-║       name: nginx-ingress                                ║  ConfigMap to feed nginx config data
+║       name: nginx-ingress                                ║  ConfigMap: to feed nginx config data
 ║   template:                                              ║  ╔══════════════════════════════════════╗
 ║     metadata:                                            ║  ║ apiVersion: v1                       ║
 ║       labels:                                            ║  ║ ind: Service                         ║
@@ -309,7 +371,7 @@ This is a special build of NGINX built specifically to be used as an ingress-con
 ║       - name: nginx-ingress-controller                   ║  ║  type: NodePort                      ║
 ║         image: >                                         ║  ║  ports:                              ║
 ║           quay.io/kubernetes-ingress-controller/         ║  ║  - port: 80                          ║
-║           nginx-ingress-controller:0.2.0 ║               ║  ║    targetPort: 80                    ║
+║           nginx-ingress-controller:0.2.0                 ║  ║    targetPort: 80                    ║
 ║       args:                                              ║  ║    protocol: TCP                     ║
 ║       - /nginx-ingress-controller                        ║  ║    name: http                        ║
 ║       - --configmap=$(POD_NAMESPACE)/nginx-configuration ║  ║  - port: 443                         ║
